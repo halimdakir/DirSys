@@ -1,6 +1,9 @@
-package com.dirsys.worktest;
+package com.dirsys.worktest.service;
 
-import com.dirsys.worktest.dto.*;
+import com.dirsys.worktest.model.Landscape;
+import com.dirsys.worktest.util.Queries;
+import com.dirsys.worktest.ResponseEntityModel;
+import com.dirsys.worktest.model.*;
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;

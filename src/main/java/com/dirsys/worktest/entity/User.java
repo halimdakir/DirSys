@@ -1,5 +1,4 @@
 package com.dirsys.worktest.entity;
-import com.dirsys.worktest.dto.Roles;
 import lombok.Getter;
 import lombok.Setter;
 

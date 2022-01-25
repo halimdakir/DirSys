@@ -1,4 +1,4 @@
-package com.dirsys.worktest.dto;
+package com.dirsys.worktest.model;
 
 public enum Roles {
     ROLE_USER,

@@ -1,7 +1,6 @@
-package com.dirsys.worktest;
+package com.dirsys.worktest.controller;
 
-import com.dirsys.worktest.dto.UserModel;
-import com.dirsys.worktest.entity.User;
+import com.dirsys.worktest.service.WorkTestService;
 import com.dirsys.worktest.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

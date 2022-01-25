@@ -1,4 +1,4 @@
-package com.dirsys.worktest.dto;
+package com.dirsys.worktest.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -1,6 +1,6 @@
 package com.dirsys.worktest;
 
-import com.dirsys.worktest.dto.PopulationSwedenSeveralYearsModel;
+import com.dirsys.worktest.model.PopulationSwedenSeveralYearsModel;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 

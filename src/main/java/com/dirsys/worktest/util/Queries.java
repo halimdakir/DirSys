@@ -1,4 +1,4 @@
-package com.dirsys.worktest;
+package com.dirsys.worktest.util;
 
 public class Queries {
 
