@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>HOME</title>
+    <link href="/webjars/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        .btn-block{
+            border-color: black;
+            color: lightslategray;
+        }
+        .container{
+            font-family: "Century Gothic", sans-serif;
+        }
+        .col-sm{
+            padding: 20px;
+            height: auto;
+            border: 2px solid white;
+            background-color: #f2eec7;
+            color: #112224;
+            font-family: "Century Gothic", sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="navbar navbar-light" style="background-color: #71b0b0; margin-top: 10px">
+            <a class="navbar-brand" style="padding-left: 10px; color: lightgrey">Home</a>
+            <a class="navbar-brand" href="population" sec:authorize="!isAnonymous()">Population Per Landscape</a>
+            <a class="navbar-brand" href="percentage" sec:authorize="!isAnonymous()">Percentage Change</a>
+            <a class="navbar-brand" href="select" sec:authorize="!isAnonymous()">Sort Population</a>
+            <a class="navbar-brand" href="login" sec:authorize="isAnonymous()">Login</a>
+            <a class="navbar-brand" sec:authorize="!isAnonymous()"><form th:action="@{/logout}" method="post">
+                <input type="submit" class="btn btn-warning btn-sm" value="Logout">
+            </form>
+            </a>
+        </nav>
+        <br>
+        <div class="container">
+            <div class="row">
+                <div class="col-sm">
+                    <h4>Upphandling av IT</h4><br>
+                    Vi vet hur krångligt det kan vara att upphandla IT. Du ska översätta verksamhetens behov, formulera krav på rätt sätt och dessutom undvika överprövning. På DirSys är vi specialister på IT-upphandling. Med vår upphandlingsmodell kan vi hjälpa er hela vägen – från behov till god affär.
+                </div>
+                <div class="col-sm">
+                    <h4>Informationssäkerhet</h4><br>
+                    Organisationer hanterar idag mängder av information. Att se till att den här informationen är riktig, tillgänglig för de som ska ta del av den och skyddad från obehöriga är idag verksamhetskritiskt. Att få ledningen att prioritera frågan på agendor, i budgetar och i resursplanering kan vara utmanande. Vi vet hur ni ska gå tillväga för att sätta informationssäkerhet hög(s)t på er agenda.
+                </div>
+                <div class="col-sm">
+                    <h4>Strategi</h4><br>
+                    IT- och digitaliseringsfrågan skär tvärs igenom traditionella strukturer och organisationer. För att lyckas krävs att alla pusselbitar sätts på plats jämte en fungerande ledning och styrning med förmåga att prioritera och besluta om rätt insatser. Vi på DirSys hjälper er att utarbeta framåtsyftande strategier och styrmodeller inom områdena för digitalisering, förvaltning av IT och eHälsa.
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</body>
+</html>

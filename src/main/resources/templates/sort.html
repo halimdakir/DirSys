@@ -1,0 +1,85 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>SORT</title>
+    <link href="/webjars/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .container .table{
+            font-family: "Century Gothic", sans-serif;
+        }
+        .titre{
+            font-family: "Century Gothic", sans-serif;
+            text-align: center;
+            border: 1px solid white;
+            background-color: whitesmoke;
+            color: lightslategray;
+        }
+        a {
+            font-family: "Century Gothic", sans-serif;
+        }
+        .links{
+            font-family: "Century Gothic", sans-serif;
+            text-align: center;
+            border: 1px solid white;
+            background-color: whitesmoke;
+            color: lightslategray;
+        }
+        .row{
+            padding: 20px;
+            height: auto;
+            border: 2px solid white;
+            background-color: #f2eec7;
+            color: #112224;
+            font-family: "Century Gothic", sans-serif;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <nav class="navbar navbar-light" style="background-color: #71b0b0; margin-top: 10px; padding-bottom: 0">
+        <a class="navbar-brand" style="padding-left: 10px" href="/">Home</a>
+        <a class="navbar-brand" href="population">Population Per Landscape</a>
+        <a class="navbar-brand" href="percentage">Percentage Change</a>
+        <a class="navbar-brand" style="color: lightgrey">Sort Population</a>
+        <a class="navbar-brand" sec:authorize="!isAnonymous()">
+            <form th:action="@{/logout}" method="post">
+                <input type="submit" class="btn btn-warning btn-sm" value="Logout">
+            </form></a>
+    </nav><BR>
+
+
+    <div class="container">
+        <div class="row">
+
+            <h4 class="titre">Descending sort by population per landscape for <span th:text="${SavedSelected.year}"></span></h4>
+            <a class="links" href="select">Choose another year</a>
+            <BR>
+
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">LANDSCAPE CODE</th>
+                    <th scope="col">LANDSCAPE NAME</th>
+                    <th scope="col">POPULATION</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="sort, stat : ${sorts}">
+                    <td th:text="${stat.index + 1}"></td>
+                    <td th:text="${sort.landscape_code}"></td>
+                    <td th:text="${sort.landscape_name}"></td>
+                    <td th:text="${sort.landscape_population}"></td>
+                </tr>
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+
+
+
+</div>
+</body>
+</html>
