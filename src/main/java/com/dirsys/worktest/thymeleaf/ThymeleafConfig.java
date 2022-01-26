@@ -1,4 +1,4 @@
-package com.dirsys.worktest.config;
+package com.dirsys.worktest.thymeleaf;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

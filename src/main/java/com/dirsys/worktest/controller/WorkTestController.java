@@ -46,6 +46,7 @@ public class WorkTestController {
         return new ResponseEntity<>(workTestService.sortPopulationPerLandscapeForEachYear(year), HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/user/all")
     public ResponseEntity<?> getAllUsers(){
         return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);
