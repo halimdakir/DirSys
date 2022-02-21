@@ -1,13 +1,14 @@
 package com.dirsys.worktest.service;
 
-import com.dirsys.worktest.model.Landscape;
-import com.dirsys.worktest.util.Queries;
 import com.dirsys.worktest.ResponseEntityModel;
 import com.dirsys.worktest.model.*;
-import com.google.gson.Gson;
+import com.dirsys.worktest.util.Queries;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
+
 import java.text.DecimalFormat;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -16,13 +17,19 @@ import java.util.stream.Collectors;
 @Service
 public class  WorkTestService {
 
+    WebClient client;
+    RestTemplate restTemplate;
+
     @Value("${url.population.landscape}")
     private String url_landscape;
     @Value("${url.population.country}")
     private String url_country;
 
 
-
+    public WorkTestService() {
+        client = WebClient.create();
+        restTemplate = new RestTemplate();
+    }
 
     public List<PercentageChangeModel> getPercentageChangeInPopulationBetweenSomeYears(){
 
@@ -67,13 +74,33 @@ public class  WorkTestService {
 
     //the population country between 2017 - 2019
     private List<PopulationSwedenSeveralYearsModel> getPopulationCountryBetweenSomeYears(){
-        return  responseEntity(url_country, Queries.queryPopulationCountryForSomeYears());
+        String [] years = {"2019", "2018", "2017"};
+        return  responseEntity(url_country, buildPostRequestQuery(years, TypePopulation.COUNTRY));
     }
 
+    private QueriesModel buildPostRequestQuery(String[] years, TypePopulation typePopulation){
+        QueriesModel queriesModel =  new QueriesModel();
+
+        if (typePopulation == TypePopulation.LANDSCAPE) {
+
+            String[] landscapeCode = Queries.LandscapeCodeList();
+            Arrays.sort(Queries.LandscapeCodeList());
+
+            Query[] queries = {new Query(QueryCode.Region.toString(), new Selection("vs:ELandskap", landscapeCode)), new Query(QueryCode.Tid.toString(), new Selection("item", years))};
+
+            queriesModel = new QueriesModel(queries, new QueryResponse("json"));
+
+        }else if (typePopulation == TypePopulation.COUNTRY){
+            Query[] queries = {new Query(QueryCode.ContentsCode.toString(), new Selection("item", new String[]{'\"'+"BE0101N1"+'\"'})), new Query(QueryCode.Tid.toString(), new Selection("item", years))};
+
+            queriesModel = new QueriesModel(queries, new QueryResponse("json"));
+        }
+        return queriesModel;
+    }
 
     public List<PopulationLandscapeYearModel> getPopulationPerLandscapeBetweenSomeYears(){
-
-         List<PopulationSwedenSeveralYearsModel> dataList = responseEntity(url_landscape, Queries.queryPopulationPerLandscapeBetweenSomeYears());
+        String [] years = {"2017", "2018", "2019"};
+        List<PopulationSwedenSeveralYearsModel> dataList = responseEntity(url_landscape, buildPostRequestQuery(years, TypePopulation.LANDSCAPE));
 
          Integer [] yearsWithDuplicates = new Integer[dataList.size()];
 
@@ -109,8 +136,8 @@ public class  WorkTestService {
     }
 
     public List<PopulationPerLandscapeModel> populationPerLandscapeBetweenSomeYears() {
-
-        List<PopulationSwedenSeveralYearsModel> dataList = responseEntity(url_landscape, Queries.queryPopulationPerLandscapeBetweenSomeYears());
+        String [] years = {"2017", "2018", "2019"};
+        List<PopulationSwedenSeveralYearsModel> dataList = responseEntity(url_landscape, buildPostRequestQuery(years, TypePopulation.LANDSCAPE));
         Integer [] codeWithDuplicates = new Integer[dataList.size()];
 
         for (int i = 0; i < dataList.size(); i++) {
@@ -161,9 +188,9 @@ public class  WorkTestService {
 
 
     public List<SortPopulationModel> sortPopulationPerLandscapeForEachYear(String year){
-
+        String []years = {year};
         //Get population per landscape for specific year
-        List<PopulationSwedenSeveralYearsModel>  populationDataList = responseEntity(url_landscape, Queries.queryToGetPopulationPerLandscapeForEachYear(year));
+        List<PopulationSwedenSeveralYearsModel>  populationDataList = responseEntity(url_landscape, buildPostRequestQuery(years, TypePopulation.LANDSCAPE));
 
         //Convert To a new list
         List<SortPopulationModel> ListSorted = new ArrayList<>();
@@ -180,20 +207,25 @@ public class  WorkTestService {
         return ListSorted;
     }
 
+    private List<PopulationSwedenSeveralYearsModel> responseEntity(String url, QueriesModel request) {
 
-    private List<PopulationSwedenSeveralYearsModel> responseEntity(String url, String request){
-        RestTemplate restTemplate = new RestTemplate();
-        //Convert String to Gson
-        Gson gson = new Gson();
-        ResponseEntityModel objectModel = gson.fromJson(restTemplate.postForEntity(url, request, String.class).getBody(), ResponseEntityModel.class);
+        ResponseEntityModel objectModel = client.post()
+                .uri(url)
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .accept(MediaType.APPLICATION_JSON)
+                .syncBody(request.toString())
+                .retrieve()
+                .bodyToMono(ResponseEntityModel.class)
+                .block();
 
-        //Get only data from the body
+        assert objectModel != null;
         return objectModel.getData().stream().toList();
     }
 
     private List<Landscape> getLandscapeNames(){
         String [] landscapeNames = Queries.LandscapeList();
-        List<PopulationSwedenSeveralYearsModel>  populationDataList = responseEntity(url_landscape, Queries.queryToGetPopulationPerLandscapeForEachYear("2017"));
+        String []years = {"2017"};
+        List<PopulationSwedenSeveralYearsModel>  populationDataList = responseEntity(url_landscape, buildPostRequestQuery(years, TypePopulation.LANDSCAPE));
         List<Landscape> landscapeNameList = new ArrayList<>();
 
         int index = 0;
