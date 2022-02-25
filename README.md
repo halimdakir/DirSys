@@ -1,4 +1,4 @@
-# DirSys Project
+# SCB Project
 
 http://localhost:8080/
 
